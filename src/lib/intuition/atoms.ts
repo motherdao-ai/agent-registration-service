@@ -8,18 +8,12 @@ type PinThingResponse = {
   };
 };
 
-export async function createOrFetchAtom(
+export async function createOrFetchThing(
   thing: Record<string, string | string[] | number>
 ): Promise<bigint> {
-  // to identify our data in the intuition graph and storage
-  const taggedThing = {
-    ...thing,
-    tag: "mother-dao",
-  };
-
   const pinThingResult = await gqlClient.request<PinThingResponse>(
     `mutation Mutation_root($thing: PinThingInput!) {   pinThing(thing: $thing) {     uri   } }`,
-    { thing: taggedThing }
+    { thing }
   );
 
   const uri = pinThingResult.pinThing.uri;
@@ -45,11 +39,21 @@ export async function createTriple(
   predicateId: bigint,
   objectId: bigint
 ): Promise<bigint> {
-  const result = await multiVault.createTriple({
-    subjectId,
-    predicateId,
-    objectId,
-  });
-
-  return result.vaultId;
+  try {
+    const result = await multiVault.createTriple({
+      subjectId,
+      predicateId,
+      objectId,
+    });
+    return result.vaultId;
+  } catch (error) {
+    // If triple already exists, treat as success
+    if (
+      error instanceof Error &&
+      error.message.includes("EthMultiVault_TripleExists")
+    ) {
+      return 0n;
+    }
+    throw error;
+  }
 }

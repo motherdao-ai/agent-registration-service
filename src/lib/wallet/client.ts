@@ -1,18 +1,32 @@
-import { createPublicClient, createWalletClient, http } from "viem";
+import { Address, createPublicClient, createWalletClient, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { base } from "viem/chains";
+import { base, baseSepolia } from "viem/chains";
 import { getPrivateKey } from "./get-private-key";
+import { config } from "../env";
+
+const getNetwork = () => {
+  const { network } = config;
+
+  switch (network) {
+    case "base":
+      return base;
+    case "baseSepolia":
+      return baseSepolia;
+    default:
+      return baseSepolia;
+  }
+};
 
 export const publicClient = createPublicClient({
-  chain: base,
+  chain: getNetwork(),
   transport: http(),
   pollingInterval: 4000,
   name: "Intuition Wallet Client",
 });
 
 export const walletClient = createWalletClient({
-  account: privateKeyToAccount(getPrivateKey()),
-  chain: base,
+  account: privateKeyToAccount(getPrivateKey() as Address),
+  chain: getNetwork(),
   transport: http(),
   pollingInterval: 4000,
   name: "Intuition Wallet Client",

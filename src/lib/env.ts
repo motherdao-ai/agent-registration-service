@@ -11,12 +11,15 @@ function getConfig() {
   const envConfigs = {
     development: {
       intuitionApiUrl: "https://dev.base-sepolia.intuition-api.com/v1/graphql",
+      network: "baseSepolia",
     },
     test: {
       intuitionApiUrl: "https://dev.base-sepolia.intuition-api.com/v1/graphql",
+      network: "baseSepolia",
     },
     production: {
       intuitionApiUrl: "https://dev.base.intuition-api.com/v1/graphql",
+      network: "base",
     },
   };
 

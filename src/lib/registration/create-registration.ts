@@ -1,5 +1,5 @@
 import { registrationSchema } from "../schemas";
-import { createOrFetchAtom, createTriple } from "../intuition/atoms";
+import { createOrFetchThing, createTriple } from "../intuition/atoms";
 
 export async function createRegistration(dataToValidate: unknown) {
   console.log({ dataToValidate });
@@ -9,66 +9,143 @@ export async function createRegistration(dataToValidate: unknown) {
   }
 
   if (success) {
-    const agentThing = {
-      name: data.agent.name,
-      // optional properties
-      primaryFunction: data.agent.primaryFunction,
-      ethWallet: data.agent.ethWallet,
-      ...(data.agent.twitterHandle && {
-        twitterHandle: data.agent.twitterHandle,
-      }),
-      ...(data.agent.description && { description: data.agent.description }),
-    };
+    const { agent, developer } = data;
 
-    const devThing = {
-      name: data.developer.name,
-      // optional properties
-      ...(data.developer.telegramHandle && {
-        telegramHandle: data.developer.telegramHandle,
-      }),
-      ...(data.developer.twitterHandle && {
-        twitterHandle: data.developer.twitterHandle,
-      }),
-    };
+    // upsert all `things`
+    const agentId = await createOrFetchThing({
+      name: agent.name,
+      description: agent.description ? agent.description : "",
+      url: "",
+      image: "",
+    });
 
-    const skillThings = data.agent.tools
-      ? data.agent.tools.map((tool) => ({ skillName: tool }))
-      : [];
+    const primaryFunctionOfAgentId = await createOrFetchThing({
+      name: agent.primaryFunction,
+      description: "an action performed by something or somebody",
+      url: "",
+      image: "",
+    });
 
-    const developedByThing = {
-      name: "developedBy",
-    };
+    const ethWalletId = await createOrFetchThing({
+      name: agent.ethWallet,
+      description: "An ethereum compatible wallet address",
+      url: "",
+      image: "",
+    });
 
-    const hasSkillThing = {
+    const developerId = await createOrFetchThing({
+      name: developer.name,
+      description: "A software developer",
+      url: "",
+      image: "",
+    });
+
+    // predicates
+    const hasWalletPredicateId = await createOrFetchThing({
+      name: "hasWallet",
+      url: "",
+      image: "",
+      description: "",
+    });
+
+    const primaryFunctionPredicateId = await createOrFetchThing({
+      name: "primaryFunction",
+      url: "",
+      image: "",
+      description: "",
+    });
+
+    const usesTwitterHandlePredicateId = await createOrFetchThing({
+      name: "usesXOrTwitterHandle",
+      description: "",
+      image: "",
+      url: "",
+    });
+
+    const usesTelegranHandlePredicateId = await createOrFetchThing({
+      name: "usesTelegramHandle",
+      description: "",
+      image: "",
+      url: "",
+    });
+
+    const hasSkillPredicateId = await createOrFetchThing({
       name: "hasSkill",
-    };
+      description: "Indicates that an agent possesses a particular skill",
+      url: "",
+      image: "",
+    });
 
-    //  craete things
-    const agentId = await createOrFetchAtom(agentThing);
-    const devId = await createOrFetchAtom(devThing);
-    const skillsId = await Promise.all(skillThings.map(createOrFetchAtom));
-    const developedByPredicateId = await createOrFetchAtom(developedByThing);
-    const hasSkillPredicateId = await createOrFetchAtom(hasSkillThing);
-
-    const addSkillTriple = (skillId: bigint) =>
-      createTriple(agentId, hasSkillPredicateId, skillId);
-
-    // add relationships
-
-    const agentDevelopedById = await createTriple(
+    // create relations
+    await createTriple(
       agentId,
-      developedByPredicateId,
-      devId
+      primaryFunctionPredicateId,
+      primaryFunctionOfAgentId
     );
 
-    const agentHasSkillsIds = await Promise.all(skillsId.map(addSkillTriple));
+    await createTriple(agentId, hasWalletPredicateId, ethWalletId);
+
+    // optional values
+    if (agent.twitterHandle) {
+      const agentTwitterHandleId = await createOrFetchThing({
+        name: agent.twitterHandle,
+        description: "a X (twitter) user handle",
+        image: "",
+        url: "",
+      });
+
+      await createTriple(
+        agentId,
+        usesTwitterHandlePredicateId,
+        agentTwitterHandleId
+      );
+    }
+
+    if (developer.twitterHandle) {
+      const devTwitterHandleId = await createOrFetchThing({
+        name: developer.twitterHandle,
+        description: "a X (twitter) user handle",
+        image: "",
+        url: "",
+      });
+
+      await createTriple(
+        developerId,
+        usesTwitterHandlePredicateId,
+        devTwitterHandleId
+      );
+    }
+
+    if (developer.telegramHandle) {
+      const devTelegramHandleId = await createOrFetchThing({
+        name: developer.telegramHandle,
+        description: "a X (twitter) user handle",
+        image: "",
+        url: "",
+      });
+
+      await createTriple(
+        developerId,
+        usesTelegranHandlePredicateId,
+        devTelegramHandleId
+      );
+    }
+
+    if (agent.tools && agent.tools.length > 0) {
+      for (const tool of agent.tools) {
+        const skillId = await createOrFetchThing({
+          name: tool,
+          description: "A tool or skill that an agent can use",
+          url: "",
+          image: "",
+        });
+
+        await createTriple(agentId, hasSkillPredicateId, skillId);
+      }
+    }
 
     return {
-      agentHasSkillsIds,
-      agentDevelopedById,
-      agentId,
-      devId,
-      skillsId,
+      agentId: agentId.toString(),
     };
   }
 }
