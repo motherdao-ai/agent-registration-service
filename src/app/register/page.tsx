@@ -16,7 +16,7 @@ export default function RegistrationForm() {
             <h3 className="text-lg font-semibold">Developer Information</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="developer.name">Name</Label>
+                <Label htmlFor="developer.name">Name *</Label>
                 <Input id="developer.name" name="developer.name" required />
               </div>
               <div>
@@ -30,7 +30,9 @@ export default function RegistrationForm() {
               </div>
             </div>
             <div>
-              <Label htmlFor="developer.telegramHandle">Telegram Handle</Label>
+              <Label htmlFor="developer.telegramHandle">
+                Telegram Handle *
+              </Label>
               <Input
                 id="developer.telegramHandle"
                 name="developer.telegramHandle"
@@ -43,11 +45,13 @@ export default function RegistrationForm() {
             <h3 className="text-lg font-semibold">Agent Information</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="agent.name">Name</Label>
+                <Label htmlFor="agent.name">Name *</Label>
                 <Input id="agent.name" name="agent.name" required />
               </div>
               <div>
-                <Label htmlFor="agent.primaryFunction">Primary Function</Label>
+                <Label htmlFor="agent.primaryFunction">
+                  Primary Function *
+                </Label>
                 <Input
                   id="agent.primaryFunction"
                   name="agent.primaryFunction"
@@ -60,7 +64,7 @@ export default function RegistrationForm() {
               <Input id="agent.description" name="agent.description" />
             </div>
             <div>
-              <Label htmlFor="agent.ethWallet">ETH Wallet</Label>
+              <Label htmlFor="agent.ethWallet">ETH Wallet *</Label>
               <Input
                 id="agent.ethWallet"
                 name="agent.ethWallet"
