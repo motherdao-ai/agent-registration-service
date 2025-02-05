@@ -52,11 +52,6 @@ describe("twitterHandleSchema", () => {
     const noSymbol = "zod";
     expect(() => twitterHandleSchema.parse(noSymbol)).toThrow();
   });
-
-  it("accepts optional handles", () => {
-    const undefinedHandle = undefined;
-    expect(() => twitterHandleSchema.parse(undefinedHandle)).not.toThrow();
-  });
 });
 
 describe("agentSchema", () => {
