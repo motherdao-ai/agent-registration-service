@@ -6,6 +6,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function SuccessCard() {
   return (
@@ -25,6 +27,9 @@ export default function SuccessCard() {
             The agent and developer information have been recorded. Your agent
             is now ready to be discovered and utilized on the network.
           </p>
+          <Button className="mt-4" variant="outline">
+            <Link href="/">Back to Home</Link>
+          </Button>
         </CardContent>
       </Card>
     </div>

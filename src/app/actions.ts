@@ -3,33 +3,29 @@
 import { redirect } from "next/navigation";
 import { createRegistration } from "@/lib/registration/create-registration";
 import { registrationSchema } from "@/lib/schemas";
+import { AgentRegistrationFormData } from "@/app/types";
 
 export async function registerAgent(formData: FormData) {
   // Extract all form fields and create nested structure
-  const rawFormData = {
+  const rawFormData: AgentRegistrationFormData = {
     developer: {
-      name: formData.get("developer.name"),
-      ...(formData.get("developer.twitterHandle") && {
-        twitterHandle: formData.get("developer.twitterHandle"),
-      }),
-      ...(formData.get("developer.telegramHandle") && {
-        telegramHandle: formData.get("developer.telegramHandle"),
-      }),
+      name: formData.get("developer.name") as string,
+      twitterHandle: formData.get("developer.twitterHandle")?.toString() ?? "",
+      telegramHandle:
+        formData.get("developer.telegramHandle")?.toString() ?? "",
     },
     agent: {
-      name: formData.get("agent.name"),
-      description: formData.get("agent.description"),
-      primaryFunction: formData.get("agent.primaryFunction"),
-      ethWallet: formData.get("agent.ethWallet"),
-      ...(formData.get("agent.twitterHandle") && {
-        twitterHandle: formData.get("agent.twitterHandle"),
-      }),
+      name: formData.get("agent.name") as string,
+      description: formData.get("agent.description") as string,
+      primaryFunction: formData.get("agent.primaryFunction") as string,
+      ethWallet: formData.get("agent.ethWallet") as string,
+      twitterHandle: formData.get("agent.twitterHandle")?.toString() ?? "",
       tools: formData
         .get("agent.tools")
         ?.toString()
         .split(",")
         .map((t) => t.trim())
-        .filter(Boolean),
+        .filter(Boolean) as string[],
     },
   };
 

@@ -96,7 +96,7 @@ export default function RegistrationForm() {
               <Button variant="outline">
                 <Link href="/">Back</Link>
               </Button>
-              <SubmitButton />
+              <SubmitButton>Register Agent</SubmitButton>
             </div>
           </form>
         </CardContent>
