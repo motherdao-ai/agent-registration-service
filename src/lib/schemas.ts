@@ -12,8 +12,7 @@ export const ethWalletSchema = z
 export const twitterHandleSchema = z
   .string()
   .regex(/^@[\w_]{3,15}$/, "Must be a valid Twitter handle")
-  .max(15 + 1)
-  .optional();
+  .max(15 + 1);
 
 export const agentSchema = z.object({
   name: z.string().min(1, "Name is required"),
