@@ -4,11 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { registerAgent } from "../actions";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { SubmitButton } from "@/components/SubmitButton";
+import { SubmitButton } from "@/app/register/submit-button";
 
 export default function RegistrationForm() {
   return (
-    <div className="flex flex-col items-center justify-center h-screen -mt-10">
+    <div className="flex flex-col items-center justify-center h-screen">
       <Card className="w-full max-w-2xl mx-auto">
         <CardHeader>
           <CardTitle>Agent Registration</CardTitle>
@@ -96,7 +96,7 @@ export default function RegistrationForm() {
               <Button variant="outline">
                 <Link href="/">Back</Link>
               </Button>
-              <SubmitButton>Register Agent</SubmitButton>
+              <SubmitButton />
             </div>
           </form>
         </CardContent>
