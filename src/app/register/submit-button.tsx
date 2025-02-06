@@ -14,7 +14,7 @@ export const SubmitButton = () => {
           Registering...
         </>
       ) : (
-        "Register"
+        "Register Agent"
       )}
     </Button>
   );

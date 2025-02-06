@@ -12,13 +12,8 @@ const Page = () => {
           by registering your agent today.
         </p>
         <div className="flex gap-4 justify-center mt-8">
-          <Link href="/register" className="">
-            <Button size="lg" variant="outline">
-              Register Agent
-            </Button>
-          </Link>
-          <Button size="lg" variant="outline">
-            Learn More
+          <Button size="lg" variant="outline" asChild>
+            <Link href="/register">Register Agent</Link>
           </Button>
         </div>
       </div>
