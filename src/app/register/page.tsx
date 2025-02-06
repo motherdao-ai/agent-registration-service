@@ -93,7 +93,7 @@ export default function RegistrationForm() {
               </div>
             </div>
             <div className="flex justify-center gap-4">
-              <Button variant="outline">
+              <Button variant="outline" asChild>
                 <Link href="/">Back</Link>
               </Button>
               <SubmitButton />
